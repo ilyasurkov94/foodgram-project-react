@@ -5,7 +5,7 @@ from recipes.models import Ingredient
 
 class Command(BaseCommand):
     """
-    python manage.py CSVexport --path ../../data/ingredients.csv
+    python manage.py CSVexport --path ../data/ingredients.csv
     """
     help = 'Creating model objects according the file path specified'
 

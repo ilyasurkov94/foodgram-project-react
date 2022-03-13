@@ -1,13 +1,15 @@
 from django.forms import ValidationError
-from .models import User
 from django.shortcuts import get_object_or_404
-from recipes.models import FollowOnUser, Recipe, FollowOnRecipe
-from rest_framework import serializers
 from drf_extra_fields.fields import Base64ImageField
+from rest_framework import serializers
+from recipes.models import FollowOnRecipe, FollowOnUser, Recipe
+from users.models import User
 
 
 class CustomUserSerializer(serializers.ModelSerializer):
-    is_subscribed = serializers.SerializerMethodField()
+    is_subscribed = serializers.SerializerMethodField(
+        method_name='get_is_subscribed'
+    )
 
     class Meta:
         model = User
@@ -39,9 +41,15 @@ class FollowOnUserSerializer(serializers.ModelSerializer):
     username = serializers.EmailField(source='author.username')
     first_name = serializers.EmailField(source='author.first_name')
     last_name = serializers.EmailField(source='author.last_name')
-    is_subscribed = serializers.SerializerMethodField(read_only=True)
-    recipes_count = serializers.SerializerMethodField(read_only=True)
-    recipes = serializers.SerializerMethodField(read_only=True)
+    is_subscribed = serializers.SerializerMethodField(
+        read_only=True,
+        method_name='get_is_subscribed')
+    recipes_count = serializers.SerializerMethodField(
+        read_only=True,
+        method_name='get_recipes_count')
+    recipes = serializers.SerializerMethodField(
+        read_only=True,
+        method_name='get_recipes')
 
     class Meta:
         model = FollowOnUser
@@ -101,13 +109,9 @@ class FollowOnRecipeSerializer(serializers.ModelSerializer):
     def validate(self, data):
         request = self.context['request']
         if request.method == 'POST':
-            """Взяли id из url"""
             recipe_id = self.context['view'].kwargs.get('id')
-
-            """Проверили наличие такого рецепта"""
             recipe = get_object_or_404(Recipe, id=recipe_id)
 
-            """Проверили наличие в в избранном"""
             if FollowOnRecipe.objects.filter(user=request.user,
                                              recipe=recipe).exists():
                 raise ValidationError('Вы уже добавили его в избранное')
@@ -123,6 +127,5 @@ class FollowOnRecipeSerializer(serializers.ModelSerializer):
         user = self.context['request'].user
         recipe_id = self.context['view'].kwargs.get('id')
         recipe = get_object_or_404(Recipe, id=recipe_id)
-        """Создали записть в FollowOnRecipe"""
         FollowOnRecipe.create(user=user, recipe=recipe_id)
         return recipe

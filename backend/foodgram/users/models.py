@@ -7,14 +7,14 @@ class User(AbstractUser):
     ADMIN = 'admin'
     BLOCKED = 'blocked'
     ROLE_CHOICES = [
-        (USER, 'user'),
-        (ADMIN, 'admin'),
-        (BLOCKED, 'blocked')
+        (USER, USER),
+        (ADMIN, ADMIN),
+        (BLOCKED, BLOCKED)
     ]
     email = models.EmailField(
         unique=True,
-        verbose_name="Почта Email",
-        help_text="Укажите email",
+        verbose_name='Почта Email',
+        help_text='Укажите email',
         error_messages={
             'unique': ('Такой email уже зарегистрирован'),
         }
@@ -23,7 +23,7 @@ class User(AbstractUser):
         max_length=100,
         unique=True,
         verbose_name='Юзернейм',
-        help_text="Укажите Username",
+        help_text='Укажите Username',
         error_messages={
             'unique': ('Такой Username занят'),
         }
@@ -31,12 +31,12 @@ class User(AbstractUser):
     first_name = models.CharField(
         max_length=100,
         verbose_name='Имя',
-        help_text="Укажите имя",
+        help_text='Укажите имя',
     )
     last_name = models.CharField(
         max_length=100,
         verbose_name='Фамилия',
-        help_text="Укажите фамилию",
+        help_text='Укажите фамилию',
     )
     role = models.CharField(
         choices=ROLE_CHOICES,

@@ -1,16 +1,15 @@
-from .models import User
-from recipes.models import FollowOnUser
 from django.shortcuts import get_object_or_404
+from django_filters import rest_framework
+from recipes.models import FollowOnUser
 from rest_framework import status, viewsets
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
-from django_filters import rest_framework
 from api.pagination import CustomPageSizePagination
-
-from .serializers import CustomUserSerializer, FollowOnUserSerializer
-from .serializers import ChangePasswordSerializer, SubscribeSerializer
-from .permissions import AllowAnyGetPost, CurrentUserOrAdmin
+from users.models import User
+from users.permissions import AllowAnyGetPost, CurrentUserOrAdmin
+from users.serializers import (ChangePasswordSerializer, CustomUserSerializer,
+                               FollowOnUserSerializer, SubscribeSerializer)
 
 
 class UserViewSet(viewsets.ModelViewSet):

@@ -8,12 +8,10 @@ class IsFavoritedFilter(filters.BaseFilterBackend):
     def filter_queryset(self, request, queryset, view):
         is_favorited = request.GET.get('is_favorited')
         user = request.user
-        if user.is_authenticated:
-            if is_favorited == '1':
-                return queryset.filter(followers__user=user)
 
-        """Если запрос на фильтрацию от анонима, но вернуть None"""
-        if is_favorited == '1' and (not user.is_authenticated):
+        if is_favorited == '1':
+            if user.is_authenticated:
+                return queryset.filter(followers__user=user)
             return None
         return queryset
 
@@ -26,11 +24,9 @@ class IsInShoppingCartFilter(filters.BaseFilterBackend):
         is_in_shopping_cart = request.GET.get('is_in_shopping_cart')
         user = request.user
 
-        if user.is_authenticated and is_in_shopping_cart == '1':
-            return queryset.filter(users_shoplist__user=user)
-
-        """Если запрос на фильтрацию от анонима, но вернуть None"""
-        if is_in_shopping_cart == '1' and (not user.is_authenticated):
+        if is_in_shopping_cart == '1':
+            if user.is_authenticated:
+                return queryset.filter(users_shoplist__user=user)
             return None
         return queryset
 

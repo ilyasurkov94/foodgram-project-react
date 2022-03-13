@@ -1,7 +1,7 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 from djoser.views import TokenCreateView, TokenDestroyView
-from .views import UserViewSet, SubscriptionsViewSet
+from users.views import UserViewSet, SubscriptionsViewSet
 
 app_name = 'users'
 
