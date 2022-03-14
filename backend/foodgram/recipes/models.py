@@ -186,11 +186,11 @@ class FollowOnRecipe(models.Model):
     class Meta:
         verbose_name = 'Подписка юзера на рецепт'
         verbose_name_plural = 'Подписки юзера на рецепт'
-        constraints = [
+        constraints = (
             models.UniqueConstraint(
                 fields=('user', 'recipe'),
                 name='user_recipe_relations'),
-        ]
+        )
 
     def __str__(self):
         return f'{self.user.username} follows {self.recipe.name}'
@@ -213,11 +213,11 @@ class ShopList(models.Model):
     class Meta:
         verbose_name = 'Рецепт в списке покупок'
         verbose_name_plural = 'Рецепты в списке покупок'
-        constraints = [
+        constraints = (
             models.UniqueConstraint(
                 fields=('user', 'recipe'),
                 name='user_recipe_shoplist_relations'),
-        ]
+        )
 
     def __str__(self):
         return f'{self.user.username} follows {self.recipe.name}'

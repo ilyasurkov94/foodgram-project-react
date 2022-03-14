@@ -9,11 +9,12 @@ class IsFavoritedFilter(filters.BaseFilterBackend):
         is_favorited = request.GET.get('is_favorited')
         user = request.user
 
-        if is_favorited == '1':
-            if user.is_authenticated:
-                return queryset.filter(followers__user=user)
-            return None
-        return queryset
+        if is_favorited != '1':
+            return queryset
+
+        if user.is_authenticated:
+            return queryset.filter(followers__user=user)
+        return None
 
 
 class IsInShoppingCartFilter(filters.BaseFilterBackend):
@@ -24,11 +25,12 @@ class IsInShoppingCartFilter(filters.BaseFilterBackend):
         is_in_shopping_cart = request.GET.get('is_in_shopping_cart')
         user = request.user
 
-        if is_in_shopping_cart == '1':
-            if user.is_authenticated:
-                return queryset.filter(users_shoplist__user=user)
-            return None
-        return queryset
+        if is_in_shopping_cart != '1':
+            return queryset
+
+        if user.is_authenticated:
+            return queryset.filter(users_shoplist__user=user)
+        return None
 
 
 class AuthorIdFilter(filters.BaseFilterBackend):

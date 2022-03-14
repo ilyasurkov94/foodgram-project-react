@@ -135,32 +135,20 @@ class RecipeViewSet(viewsets.ModelViewSet):
 
 class DownloadShopGetView(APIView):
     def get(self, request):
+        PDF = 'application/pdf'
         user = request.user
+        if user.is_anonymous:
+            return Response('Вы не авторизованы',
+                            status=status.HTTP_401_UNAUTHORIZED)
         shoplist_to_download = IngredientAmount.objects.filter(
             recipe__users_shoplist__user=user).values(
                 'ingredient__name', 'ingredient__measurement_unit'
         ).annotate(count=Sum('amount'))
 
-        content_type = request.query_params.get('content_type')
-        if content_type == 'application/txt':
-            return self.dowload_text(user, shoplist_to_download)
-        elif content_type == 'application/pdf':
-            return self.download_pdf(user, shoplist_to_download)
-        return Response('Error: Вы не указали желаемый формат данных, '
-                        'укажите в query_params content_type '
-                        'application/txt или application/pdf',
-                        status=status.HTTP_400_BAD_REQUEST)
-
-    def dowload_text(self, user, data):
-        response = HttpResponse(data, content_type='application/txt')
-        response['Content-Disposition'] = 'attachment; filename=shopping-list'
-        return response
-
-    def download_pdf(self, user, data):
         file_name = f'Список покупок. Автор {user.first_name} {user.last_name}'
         doc_title = f'Список покупок. Автор {user.first_name} {user.last_name}'
         title = (f'Список покупок. Автор {user.first_name} {user.last_name}')
-        response = HttpResponse(content_type='application/pdf')
+        response = HttpResponse(content_type=PDF)
         content_disposition = f'attachment; filename="{file_name}.pdf"'
         response['Content-Disposition'] = content_disposition
         pdf = canvas.Canvas(response)
@@ -169,18 +157,22 @@ class DownloadShopGetView(APIView):
         pdf.setFont('DejaVuSans', 24)
         pdf.drawCentredString(300, 770, title)
         pdf.line(30, 710, 565, 710)
-        string_height = 670
+        string_height = 650
 
-        for item in data:
+        for item in shoplist_to_download:
+            name = item["ingredient__name"].capitalize()
+            count = item["count"]
+            measurement_unit = item["ingredient__measurement_unit"]
             pdf.drawString(
                 40,
                 string_height,
-                (f'{item["ingredient__name"]} - '
-                 f'{item["count"]} '
-                 f'{item["ingredient__measurement_unit"]}'
+                (f'{name} - '
+                 f'{count} '
+                 f'{measurement_unit}'
                  )
             )
             string_height -= 50
+
         pdf.showPage()
         pdf.save()
         return response

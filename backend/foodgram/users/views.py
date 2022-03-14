@@ -6,8 +6,8 @@ from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from api.pagination import CustomPageSizePagination
+from api.permissions import AllowAnyGetPost, CurrentUserOrAdmin
 from users.models import User
-from users.permissions import AllowAnyGetPost, CurrentUserOrAdmin
 from users.serializers import (ChangePasswordSerializer, CustomUserSerializer,
                                FollowOnUserSerializer, SubscribeSerializer)
 
@@ -15,10 +15,10 @@ from users.serializers import (ChangePasswordSerializer, CustomUserSerializer,
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all().order_by('id')
     serializer_class = CustomUserSerializer
-    permission_classes = [AllowAnyGetPost]
+    permission_classes = (AllowAnyGetPost, )
     pagination_class = CustomPageSizePagination
 
-    @action(detail=False, methods=['get'],
+    @action(detail=False, methods=('get', ),
             permission_classes=[IsAuthenticated])
     def me(self, request):
         """
@@ -27,8 +27,8 @@ class UserViewSet(viewsets.ModelViewSet):
         serializer = self.get_serializer(self.request.user)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
-    @action(detail=False, methods=['post'],
-            permission_classes=[CurrentUserOrAdmin])
+    @action(detail=False, methods=('post', ),
+            permission_classes=(CurrentUserOrAdmin, ))
     def set_password(self, request, *args, **kwargs):
         """
         Определили действия при api/users/set_password
@@ -37,24 +37,22 @@ class UserViewSet(viewsets.ModelViewSet):
             data=request.data,
             context={'request': request}
         )
-        self.obj = self.request.user
+        serializer.is_valid(raise_exception=True)
 
-        # Проверка старого пароля
-        if serializer.is_valid():
-            current_password = serializer.data.get("current_password")
-            new_password = serializer.data.get("new_password")
-            if not self.obj.check_password(current_password):
-                return Response("Старый пароль введен неправильно",
-                                status=status.HTTP_400_BAD_REQUEST)
-            self.obj.set_password(new_password)
-            self.obj.save()
-            return Response("Пароль успешно изменен",
-                            status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        self.obj = self.request.user
+        current_password = serializer.data.get("current_password")
+        new_password = serializer.data.get("new_password")
+        if not self.obj.check_password(current_password):
+            return Response("Старый пароль введен неправильно",
+                            status=status.HTTP_400_BAD_REQUEST)
+        self.obj.set_password(new_password)
+        self.obj.save()
+        return Response("Пароль успешно изменен",
+                        status=status.HTTP_201_CREATED)
 
     @action(detail=True,
-            methods=['post', 'delete'],
-            permission_classes=[IsAuthenticated])
+            methods=('post', 'delete'),
+            permission_classes=(IsAuthenticated, ))
     def subscribe(self, request, pk):
         """
         Определили действия при api/users/{id}/subscribe
@@ -86,20 +84,18 @@ class UserViewSet(viewsets.ModelViewSet):
                     data=serializer.data,
                     status=status.HTTP_201_CREATED
                 )
-            else:
-                return Response('Error: Вы уже подписаны на автора '
-                                f'{author.username} (id - {pk})',
-                                status=status.HTTP_400_BAD_REQUEST)
+            return Response('Error: Вы уже подписаны на автора '
+                            f'{author.username} (id - {pk})',
+                            status=status.HTTP_400_BAD_REQUEST)
 
         if request.method == 'DELETE':
             if is_already_follow:
                 FollowOnUser.objects.filter(user=user, author=author).delete()
                 return Response('Подписка удалена',
                                 status=status.HTTP_204_NO_CONTENT)
-            else:
-                return Response('Error: Вы не были подписаны на автора '
-                                f'{author.username} (id - {pk})',
-                                status=status.HTTP_400_BAD_REQUEST)
+            return Response('Error: Вы не были подписаны на автора '
+                            f'{author.username} (id - {pk})',
+                            status=status.HTTP_400_BAD_REQUEST)
 
         return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
 
@@ -108,7 +104,7 @@ class SubscriptionsViewSet(viewsets.ModelViewSet):
     serializer_class = FollowOnUserSerializer
     pagination_class = CustomPageSizePagination
     filter_backends = (rest_framework.DjangoFilterBackend,)
-    permission_classes = [IsAuthenticated]
+    permission_classes = (IsAuthenticated, )
 
     def get_queryset(self):
         user = self.request.user

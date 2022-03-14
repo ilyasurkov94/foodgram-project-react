@@ -6,11 +6,11 @@ class User(AbstractUser):
     USER = 'user'
     ADMIN = 'admin'
     BLOCKED = 'blocked'
-    ROLE_CHOICES = [
+    ROLE_CHOICES = (
         (USER, USER),
         (ADMIN, ADMIN),
         (BLOCKED, BLOCKED)
-    ]
+    )
     email = models.EmailField(
         unique=True,
         verbose_name='Почта Email',
@@ -56,3 +56,11 @@ class User(AbstractUser):
     @property
     def is_blocked(self):
         return self.role == self.BLOCKED
+
+    class Meta:
+        verbose_name = 'Пользователь'
+        verbose_name_plural = 'Пользователи'
+
+    def __str__(self):
+        return (f'{self.username}, id - {self.id}. '
+                f'{self.first_name} {self.last_name}')

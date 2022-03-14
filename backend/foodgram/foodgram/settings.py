@@ -1,8 +1,14 @@
 from pathlib import Path
 import os
+from dotenv import load_dotenv
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+
+# Настройка DOTENV. Задан путь до файла .env
+dotenv_path = os.path.join(BASE_DIR, '../../infra/.env')
+load_dotenv(dotenv_path)
 
 
 # Quick-start development settings - unsuitable for production
@@ -70,24 +76,25 @@ WSGI_APPLICATION = 'foodgram.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
-"""
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+
+if os.getenv('ENV') == 'LOCAL':
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
     }
-}
-"""
-DATABASES = {
-    'default': {
-        'ENGINE': os.getenv('DB_ENGINE', default="django.db.backends.postgresql"),
-        'NAME': os.getenv('DB_NAME', default="postgres"),
-        'USER': os.getenv('POSTGRES_USER', default="postgres_user"),
-        'PASSWORD': os.getenv('POSTGRES_PASSWORD', default="postgres_password"),
-        'HOST': os.getenv('DB_HOST', default="db"),
-        'PORT': os.getenv('DB_PORT', default=5432)
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': os.getenv('DB_ENGINE', default='django.db.backends.postgresql'),
+            'NAME': os.getenv('DB_NAME', default='postgres'),
+            'USER': os.getenv('POSTGRES_USER', default='postgres_user'),
+            'PASSWORD': os.getenv('POSTGRES_PASSWORD', default='postgres_password'),
+            'HOST': os.getenv('DB_HOST', default='db'),
+            'PORT': os.getenv('DB_PORT', default=5432)
+        }
     }
-}
 
 
 # Password validation
