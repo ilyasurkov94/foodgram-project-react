@@ -1,6 +1,5 @@
 version: '3.3'
 services:
-  # Новые данные
   db:
     image: postgres:13.0-alpine
     volumes:
@@ -10,11 +9,11 @@ services:
 
 
   backend:
-    image: #Добавить адрес до докера на докерхабе
+    image: surkovdocker/foodgram-backend:latest
     restart: always
     volumes:
-      - static_value:/app/static/
-      - media_value:/app/media/
+      - static_value:/app/foodgram/static/
+      - media_value:/app/foodgram/media/
       - docs:/app/docs/
     env_file:
       - ./.env
@@ -23,7 +22,7 @@ services:
 
 
   frontend:
-    image: #Добавить адрес до докера на докерхабе
+    image: surkovdocker/foodgram-frontend:latest
     volumes:
       - result_build:/app/result_build/
     depends_on:
