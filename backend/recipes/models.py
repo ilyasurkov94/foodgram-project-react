@@ -5,7 +5,7 @@ from django.core import validators
 
 class Tag(models.Model):
     name = models.CharField(
-        max_length=50,
+        max_length=500,
         unique=True,
         verbose_name='Название тега',
         help_text='Имя тега, не более 50 символов',
@@ -43,12 +43,12 @@ class Tag(models.Model):
 
 class Ingredient(models.Model):
     name = models.CharField(
-        max_length=50,
-        verbose_name='Назвиние ингредиента',
+        max_length=500,
+        verbose_name='Название ингредиента',
         help_text='Выберите название ингредиента',
     )
     measurement_unit = models.CharField(
-        max_length=20,
+        max_length=500,
         verbose_name='Единица измерения',
         help_text='Укажите единицу измерения'
     )
@@ -70,7 +70,7 @@ class Recipe(models.Model):
         help_text='Выбери автора рецепта'
     )
     name = models.CharField(
-        max_length=200,
+        max_length=500,
         verbose_name='Название рецепта',
         help_text='Укажи название рецепта',
     )

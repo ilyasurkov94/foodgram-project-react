@@ -13,7 +13,7 @@ from recipes.models import (FollowOnRecipe, Ingredient, IngredientAmount,
 from api.filters import (AuthorIdFilter, IsFavoritedFilter,
                          IsInShoppingCartFilter, TagsSlugFilter)
 from api.pagination import CustomPageSizePagination
-from api.permissions import IsAdminAuthorOrReadPermission, IsAdminOrReadOnly
+from api.permissions import IsAdminAuthorOrReadPost, IsAdminOrReadOnly
 from api.serializers import (IngredientReadSerializer, RecipeCreateSerializer,
                              RecipeFavoriteSerializer, RecipeReadSerializer,
                              TagSerializer)
@@ -35,7 +35,7 @@ class IngredientViewSet(viewsets.ModelViewSet):
 
 class RecipeViewSet(viewsets.ModelViewSet):
     queryset = Recipe.objects.all()
-    permission_classes = (IsAdminAuthorOrReadPermission, )
+    permission_classes = (IsAdminAuthorOrReadPost, )
     pagination_class = CustomPageSizePagination
     filter_backends = (IsFavoritedFilter, IsInShoppingCartFilter,
                        AuthorIdFilter, TagsSlugFilter)
@@ -46,9 +46,6 @@ class RecipeViewSet(viewsets.ModelViewSet):
         if self.action in ('retrieve', 'list'):
             return RecipeReadSerializer
         return RecipeCreateSerializer
-
-    def perform_create(self, serializer):
-        return serializer.save(author=self.request.user)
 
     def destroy(self, request, pk=None):
         user = self.request.user

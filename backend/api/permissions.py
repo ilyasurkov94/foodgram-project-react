@@ -20,16 +20,16 @@ class IsAdminOrReadOnly(permissions.BasePermission):
         return request.user.is_admin
 
 
-class IsAdminAuthorOrReadPermission(permissions.BasePermission):
+class IsAdminAuthorOrReadPost(permissions.BasePermission):
     def has_permission(self, request, view):
-        if request.method in permissions.SAFE_METHODS:
+        if request.method in SAFE_METHODS or request.method == 'POST':
             return True
         if request.user.is_anonymous:
             return False
-        return request.user.is_admin
+        return True
 
     def has_object_permission(self, request, view, obj):
-        if request.method in permissions.SAFE_METHODS:
+        if request.method in SAFE_METHODS or request.method == 'POST':
             return True
 
         if request.user.is_anonymous:

@@ -20,7 +20,7 @@ class User(AbstractUser):
         }
     )
     username = models.CharField(
-        max_length=100,
+        max_length=500,
         unique=True,
         verbose_name='Юзернейм',
         help_text='Укажите Username',
@@ -29,18 +29,18 @@ class User(AbstractUser):
         }
     )
     first_name = models.CharField(
-        max_length=100,
+        max_length=500,
         verbose_name='Имя',
         help_text='Укажите имя',
     )
     last_name = models.CharField(
-        max_length=100,
+        max_length=500,
         verbose_name='Фамилия',
         help_text='Укажите фамилию',
     )
     role = models.CharField(
         choices=ROLE_CHOICES,
-        max_length=200,
+        max_length=500,
         default=USER,
         verbose_name='Пользовательские роли',
     )

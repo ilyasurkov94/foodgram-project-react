@@ -1,5 +1,6 @@
 from django.forms import ValidationError
 from django.shortcuts import get_object_or_404
+from django.db import IntegrityError, transaction
 from drf_extra_fields.fields import Base64ImageField
 from rest_framework import serializers
 from recipes.models import FollowOnRecipe, FollowOnUser, Recipe
@@ -26,6 +27,13 @@ class CustomUserSerializer(serializers.ModelSerializer):
             return FollowOnUser.objects.filter(
                 user=user, author=obj.id).exists()
         return False
+
+    def create(self, validated_data):
+        try:
+            with transaction.atomic():
+                return User.objects.create_user(**validated_data)
+        except IntegrityError:
+            self.fail('Не удалось создать пользователя')
 
 
 class ChangePasswordSerializer(serializers.Serializer):

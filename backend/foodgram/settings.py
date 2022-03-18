@@ -7,7 +7,7 @@ from dotenv import load_dotenv
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # Настройка DOTENV. Задан путь до файла .env
-dotenv_path = os.path.join(BASE_DIR, '../../infra/.env')
+dotenv_path = os.path.join(BASE_DIR, '../infra/.env')
 load_dotenv(dotenv_path)
 
 
@@ -21,8 +21,9 @@ SECRET_KEY = os.getenv('SECRET_KEY', default='key'),
 # DEBUG = bool(os.getenv('DEBUG'))
 DEBUG = True
 
-ALLOWED_HOSTS = ['*', ]
-
+ALLOWED_HOSTS = ['*', 'localhost', '127.0.0.1', '[::1]', 'testserver']
+CSRF_TRUSTED_ORIGINS = ['https://*', 'https://*localhost', 'https://*.127.0.0.1',
+                        'http://*', 'http://*localhost', 'http://*.127.0.0.1']
 
 # Application definition
 
@@ -132,7 +133,8 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
 
 STATIC_URL = 'static/'
-STATICFILES_DIRS = (os.path.join(BASE_DIR, 'static'),)
+# STATICFILES_DIRS = (os.path.join(BASE_DIR, 'static'),)
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
@@ -155,6 +157,6 @@ REST_FRAMEWORK = {
 
 DJOSER = {
     'LOGIN_FIELD': 'email',
-    'SEND_ACTIVATION_EMAIL': False,
-    'SERIALIZERS': {},
+    # 'SEND_ACTIVATION_EMAIL': False,
+    # 'SERIALIZERS': {},
 }
