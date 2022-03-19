@@ -11,7 +11,7 @@
 [![docker](https://img.shields.io/badge/-Docker-464646?style=flat-square&logo=docker)](https://www.docker.com/)
 [![GitHub%20Actions](https://img.shields.io/badge/-GitHub%20Actions-464646?style=flat-square&logo=GitHub%20actions)](https://github.com/features/actions)
 [![Yandex.Cloud](https://img.shields.io/badge/-Yandex.Cloud-464646?style=flat-square&logo=Yandex.Cloud)](https://cloud.yandex.ru/)
-[![Django-app workflow](https://github.com/romangrbr/foodgram-project-react/actions/workflows/main.yml/badge.svg)]
+
 
 ## Описание:
 
@@ -59,12 +59,11 @@
 
 
 
-## Администратор и админ-зона
-:one: Все модели выведены в админ-зону с возможностью редактирования и удаление записей.  
-:two: Для модели пользователей включена фильтрация списка по имени и email.  
-:three: Для модели рецептов включена фильтрация по автору, названию рецепта, тегам.  
-:four: На админ-странице рецепта отображается общее число добавлений этого рецепта в избранное.  
-:five: Для модели ингредиентов включена фильтрация по названию.  
+## Админ-зона
+:one: Все модели доступны в админ-зоне, в том числе редактирование/удаление запискей.
+:two: Добавлена возможнсть блокирования пользователей. Заблокированные пользователя не имеют доступ к ресурсу.
+:three: На админ-странице рецепта отображается количество добавлений этого рецепта в избранное.  
+:four: Для модели ингредиентов включена фильтрация по названию.  
 
 ## Создание пользователя администратором
 Пользователя может создать администратор — через админ-зону или через POST-запрос на специальный эндпоинт api/users/
@@ -119,5 +118,6 @@ docker-compose exec backend python manage.py collectstatic --no-input
 
 ### Контакты автора проекта:
 _Сурков Илья_
+---
 **email:** _ilyasurkov1994@mail.ru_  
 **telegram:** _@Surkov_i_  
