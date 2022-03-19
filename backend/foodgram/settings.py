@@ -21,10 +21,11 @@ SECRET_KEY = os.getenv('SECRET_KEY', default='key'),
 # DEBUG = bool(os.getenv('DEBUG'))
 DEBUG = True
 
-ALLOWED_HOSTS = ['*', 'localhost', '127.0.0.1', '[::1]', 'testserver']
+ALLOWED_HOSTS = ['*', 'localhost', '127.0.0.1', '[::1]', 'testserver', 'foodgram-project.ddns.net']
 CSRF_TRUSTED_ORIGINS = ['https://*', 'https://*localhost', 'https://*.127.0.0.1',
-                        'http://*', 'http://*localhost', 'http://*.127.0.0.1', '*',
-                        'http://*.62.84.121.23', 'http://*.foodgram-project.ddns.net']
+                        'http://*', 'http://*localhost', 'http://*.127.0.0.1',
+                        'http://*.62.84.121.23', 'http://*.foodgram-project.ddns.net',
+                        'https://*foodgram-project.ddns.net']
 
 # Application definition
 
