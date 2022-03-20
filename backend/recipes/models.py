@@ -110,6 +110,8 @@ class Recipe(models.Model):
     def __str__(self):
         return self.name
 
+    def clean(self):
+        
 
 class IngredientAmount(models.Model):
     recipe = models.ForeignKey(

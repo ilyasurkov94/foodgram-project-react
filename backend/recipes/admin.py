@@ -1,7 +1,7 @@
 from django.contrib import admin
 from recipes.models import (FollowOnRecipe, FollowOnUser, Ingredient,
                             IngredientAmount, Recipe, Tag)
-from users.forms import RecipeForm
+from users.forms import IngredientAmountFormset
 
 
 class TagAdmin(admin.ModelAdmin):
@@ -18,13 +18,12 @@ class IngredientAdmin(admin.ModelAdmin):
 
 class IngredientAmountInLine(admin.TabularInline):
     model = IngredientAmount
+    formset = IngredientAmountFormset
     extra = 1
 
 
 class RecipeAdmin(admin.ModelAdmin):
-    form = RecipeForm
     inlines = (IngredientAmountInLine,)
-    filter_horizontal = ('ingredients',)
     list_display = ('pk', 'author', 'name',
                     'cooking_time', 'pub_date', 'followers', 'image')
     list_editable = ('author', 'name')
