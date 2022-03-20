@@ -73,6 +73,8 @@ jobs:
         script: |
             sudo docker pull ${{ secrets.DOCKER_USERNAME  }}/foodgram-backend:latest
             cd foodgram-project-react/infra
+            docker-compose exec backend python manage.py makemigrations
+            docker-compose exec backend python manage.py migrate
             sudo docker-compose stop
             sudo docker-compose rm backend
             sudo docker-compose up -d

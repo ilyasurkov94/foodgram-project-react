@@ -44,7 +44,7 @@ class UserViewSet(viewsets.ModelViewSet):
         current_password = serializer.data.get("current_password")
         new_password = serializer.data.get("new_password")
         if not self.obj.check_password(current_password):
-            return ValidationError("Старый пароль введен неправильно")
+            raise ValidationError("Старый пароль введен неправильно")
         self.obj.set_password(new_password)
         self.obj.save()
         return Response(status=status.HTTP_201_CREATED)
