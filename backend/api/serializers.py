@@ -133,28 +133,23 @@ class RecipeCreateSerializer(serializers.ModelSerializer):
         return recipe
 
     def update(self, instance, validated_data):
-        IngredientAmount.objects.filter(recipe=instance).all().delete()
-        ingredients_data = validated_data.pop('ingredients')
-        tags_data = validated_data.pop('tags')
-        instance.name = validated_data.get('name', instance.name)
-        instance.text = validated_data.get('text', instance.text)
-        instance.image = validated_data.get('image', instance.image)
-        instance.cooking_time = validated_data.get(
-            'cooking_time', instance.cooking_time)
-
+        instance.ingredients.clear()
         instance.tags.clear()
-        instance.tags.set(tags_data)
+
+        ingredients_data = validated_data.pop('ingredients')
+        tags = self.initial_data.get('tags')
+        for tag in tags:
+            instance.tags.add(tag)
 
         for ingredient in ingredients_data:
-            id, amount = ingredient['id'], ingredient['amount']
-            ingredient_to_add = get_object_or_404(Ingredient, id=id)
+            ingredient_id = ingredient.get('id')
+            ingredient_amount = ingredient.get('amount')
             IngredientAmount.objects.create(
-                ingredient=ingredient_to_add,
-                recipe=instance, amount=amount
+                recipe=instance,
+                ingredient_id=ingredient_id,
+                amount=ingredient_amount
             )
-
-        instance.save()
-        return instance
+        return super().update(instance, validated_data)
 
 
 class ShopListCreateSerializer(serializers.ModelSerializer):

@@ -12,7 +12,7 @@ class IngredientAdmin(admin.ModelAdmin):
     list_display = ('pk', 'name', 'measurement_unit')
     list_editable = ('name', 'measurement_unit')
     search_fields = ('name', )
-    list_filter = ('name', )
+    list_filter = ('measurement_unit', )
 
 
 class IngredientAmountInLine(admin.TabularInline):
@@ -25,7 +25,7 @@ class RecipeAdmin(admin.ModelAdmin):
     list_display = ('pk', 'author', 'name', 'cooking_time',
                     'pub_date', 'followers', 'image')
     list_editable = ('author', 'name')
-    list_filter = ('author', 'name', 'tags')
+    list_filter = ('author', 'tags')
 
     def followers(self, obj):
         return obj.followers.count()
@@ -35,7 +35,7 @@ class RecipeAdmin(admin.ModelAdmin):
 class IngredientAmountAdmin(admin.ModelAdmin):
     list_display = ('pk', 'ingredient', 'recipe', 'amount')
     list_editable = ('ingredient', 'recipe', 'amount')
-    list_filter = ('ingredient', 'recipe', 'amount')
+    list_filter = ('ingredient', )
 
 
 class FollowOnUserAdmin(admin.ModelAdmin):

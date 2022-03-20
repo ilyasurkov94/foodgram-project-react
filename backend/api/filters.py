@@ -1,4 +1,5 @@
 from rest_framework import filters
+from rest_framework.filters import SearchFilter
 
 
 class IsFavoritedFilter(filters.BaseFilterBackend):
@@ -54,3 +55,7 @@ class TagsSlugFilter(filters.BaseFilterBackend):
         if tags:
             return queryset.filter(tags__slug__in=tags).distinct()
         return queryset
+
+
+class IngredientSearchFilter(SearchFilter):
+    search_param = 'name'

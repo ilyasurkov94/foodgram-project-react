@@ -11,7 +11,8 @@ from rest_framework.views import APIView
 from recipes.models import (FollowOnRecipe, Ingredient, IngredientAmount,
                             Recipe, ShopList, Tag)
 from api.filters import (AuthorIdFilter, IsFavoritedFilter,
-                         IsInShoppingCartFilter, TagsSlugFilter)
+                         IsInShoppingCartFilter, TagsSlugFilter,
+                         IngredientSearchFilter)
 from api.pagination import CustomPageSizePagination
 from api.permissions import IsAdminAuthorOrReadPost, IsAdminOrReadOnly
 from api.serializers import (IngredientReadSerializer, RecipeCreateSerializer,
@@ -31,6 +32,8 @@ class IngredientViewSet(viewsets.ModelViewSet):
     queryset = Ingredient.objects.all()
     serializer_class = IngredientReadSerializer
     permission_classes = (IsAdminOrReadOnly, )
+    filter_backends = (IngredientSearchFilter,)
+    search_fields = ('^name',)
 
 
 class RecipeViewSet(viewsets.ModelViewSet):

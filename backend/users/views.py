@@ -10,6 +10,7 @@ from api.permissions import AllowAnyGetPost, CurrentUserOrAdmin
 from users.models import User
 from users.serializers import (ChangePasswordSerializer, CustomUserSerializer,
                                FollowOnUserSerializer, SubscribeSerializer)
+from django.forms import ValidationError
 
 
 class UserViewSet(viewsets.ModelViewSet):
@@ -43,12 +44,10 @@ class UserViewSet(viewsets.ModelViewSet):
         current_password = serializer.data.get("current_password")
         new_password = serializer.data.get("new_password")
         if not self.obj.check_password(current_password):
-            return Response("Старый пароль введен неправильно",
-                            status=status.HTTP_400_BAD_REQUEST)
+            return ValidationError("Старый пароль введен неправильно")
         self.obj.set_password(new_password)
         self.obj.save()
-        return Response("Пароль успешно изменен",
-                        status=status.HTTP_201_CREATED)
+        return Response(status=status.HTTP_201_CREATED)
 
     @action(detail=True,
             methods=('post', 'delete'),
