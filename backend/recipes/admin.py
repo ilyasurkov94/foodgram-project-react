@@ -24,7 +24,8 @@ class IngredientAmountInLine(admin.TabularInline):
 class RecipeAdmin(admin.ModelAdmin):
     form = RecipeForm
     inlines = (IngredientAmountInLine,)
-    list_display = ('pk', 'author', 'name', 'ingredients',
+    filter_horizontal = ('ingredients',)
+    list_display = ('pk', 'author', 'name',
                     'cooking_time', 'pub_date', 'followers', 'image')
     list_editable = ('author', 'name')
     list_filter = ('author', 'tags')
