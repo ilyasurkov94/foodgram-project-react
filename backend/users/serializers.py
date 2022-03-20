@@ -42,6 +42,14 @@ class ChangePasswordSerializer(serializers.Serializer):
     current_password = serializers.CharField(required=True)
     new_password = serializers.CharField(required=True)
 
+    def validate(self, obj):
+        user = self.context.get('request').user
+        current_password = self.initial_data.get("current_password")
+
+        if not user.check_password(current_password):
+            raise ValidationError("Старый пароль введен неправильно")
+        return super().validate(obj)
+
 
 class FollowOnUserSerializer(serializers.ModelSerializer):
     email = serializers.EmailField(source='author.email')
