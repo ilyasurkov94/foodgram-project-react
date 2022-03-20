@@ -13,7 +13,7 @@ class Tag(models.Model):
             'unique': ('Такой тег уже есть'),
         },
     )
-    hexcolor = models.CharField(
+    color = models.CharField(
         max_length=7,
         default='#ffffff',
         unique=True,

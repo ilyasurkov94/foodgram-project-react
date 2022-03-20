@@ -9,7 +9,7 @@ from users.serializers import CustomUserSerializer
 class TagSerializer(serializers.ModelSerializer):
     class Meta:
         model = Tag
-        fields = ('id', 'name', 'hexcolor', 'slug')
+        fields = ('id', 'name', 'color', 'slug')
 
 
 class IngredientReadSerializer(serializers.ModelSerializer):
