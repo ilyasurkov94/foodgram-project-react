@@ -4,7 +4,8 @@ from django.forms import ValidationError
 
 class IngredientAmountFormset(BaseInlineFormSet):
     def clean(self):
-        raise ValidationError(f'{self.forms}')
+        if self.forms == []:
+            raise ValidationError('Добавьте минимум один ингредиент')
         if self.cleaned_data is None:
             raise ValidationError('Заполните данные ингредиентов')
         if self.cleaned_data == [{}]:
