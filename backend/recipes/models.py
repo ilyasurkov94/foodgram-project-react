@@ -1,7 +1,7 @@
 from django.db import models
 from users.models import User
 from django.core import validators
-from .validators import validate_ingredients_exitsts
+
 
 class Tag(models.Model):
     name = models.CharField(
@@ -87,9 +87,9 @@ class Recipe(models.Model):
         verbose_name='Ингредиенты',
         related_name='recipes',
         through='IngredientAmount',
+        required=True,
         blank=False,
         null=False,
-        validators=[validate_ingredients_exitsts]
     )
     tags = models.ManyToManyField(
         Tag,
