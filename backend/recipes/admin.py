@@ -5,8 +5,8 @@ from users.forms import IngredientAmountFormset
 
 
 class TagAdmin(admin.ModelAdmin):
-    list_display = ('pk', 'name', 'hexcolor', 'slug')
-    list_editable = ('name', 'hexcolor', 'slug')
+    list_display = ('pk', 'name', 'color', 'slug')
+    list_editable = ('name', 'color', 'slug')
 
 
 class IngredientAdmin(admin.ModelAdmin):
