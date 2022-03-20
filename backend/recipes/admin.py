@@ -1,7 +1,7 @@
 from django.contrib import admin
 from recipes.models import (FollowOnRecipe, FollowOnUser, Ingredient,
                             IngredientAmount, Recipe, Tag)
-from users.forms import IngredientAmountForm
+from users.forms import RecipeForm
 
 
 class TagAdmin(admin.ModelAdmin):
@@ -18,14 +18,11 @@ class IngredientAdmin(admin.ModelAdmin):
 
 class IngredientAmountInLine(admin.TabularInline):
     model = IngredientAmount
-    form = IngredientAmountForm
     extra = 1
-
-    # class Meta:
-    #     model = IngredientAmount
 
 
 class RecipeAdmin(admin.ModelAdmin):
+    form = RecipeForm
     inlines = (IngredientAmountInLine,)
     list_display = ('pk', 'author', 'name', 'ingredients',
                     'cooking_time', 'pub_date', 'followers', 'image')
@@ -35,9 +32,6 @@ class RecipeAdmin(admin.ModelAdmin):
     def followers(self, obj):
         return obj.followers.count()
     followers.short_description = 'Количество подписчиков'
-
-    class Meta:
-        model = Recipe
 
 
 class IngredientAmountAdmin(admin.ModelAdmin):

@@ -1,18 +1,18 @@
 from django import forms
-from recipes.models import IngredientAmount
+from recipes.models import Recipe
 
 
-class IngredientAmountForm(forms.ModelForm):
+class RecipeForm(forms.ModelForm):
     class Meta:
-        model = IngredientAmount
-        fields = ['ingredient', 'amount']
+        model = Recipe
+        fields = ('author', 'name', 'image', 'text',
+                  'tags', 'cooking_time')
 
     def clean(self):
         """
-        Проверка наличия информации о рецепте
+        Проверка наличия ингредиентов
         """
         ingredient = self.cleaned_data.get('ingredient')
-        amount = self.cleaned_data.get('amount')
-        if ingredient and amount:
+        if ingredient:
             return self.cleaned_data
         raise forms.ValidationError('Заполните данные ингредиента')
