@@ -17,7 +17,7 @@ class IngredientAdmin(admin.ModelAdmin):
 
 
 class IngredientAmountInLine(admin.TabularInline):
-    model = IngredientAmount
+    # model = IngredientAmount
     form = IngredientAmountForm
     extra = 1
 
