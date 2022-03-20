@@ -1,6 +1,7 @@
 from django.contrib import admin
 from recipes.models import (FollowOnRecipe, FollowOnUser, Ingredient,
                             IngredientAmount, Recipe, Tag)
+from users.forms import IngredientAmountForm
 
 
 class TagAdmin(admin.ModelAdmin):
@@ -17,6 +18,7 @@ class IngredientAdmin(admin.ModelAdmin):
 
 class IngredientAmountInLine(admin.TabularInline):
     model = IngredientAmount
+    form = IngredientAmountForm
     extra = 1
 
 
