@@ -17,21 +17,27 @@ class IngredientAdmin(admin.ModelAdmin):
 
 
 class IngredientAmountInLine(admin.TabularInline):
-    # model = IngredientAmount
+    model = IngredientAmount
     form = IngredientAmountForm
     extra = 1
+
+    # class Meta:
+    #     model = IngredientAmount
 
 
 class RecipeAdmin(admin.ModelAdmin):
     inlines = (IngredientAmountInLine,)
-    list_display = ('pk', 'author', 'name', 'cooking_time',
-                    'pub_date', 'followers', 'image')
+    list_display = ('pk', 'author', 'name', 'ingredients',
+                    'cooking_time', 'pub_date', 'followers', 'image')
     list_editable = ('author', 'name')
     list_filter = ('author', 'tags')
 
     def followers(self, obj):
         return obj.followers.count()
     followers.short_description = 'Количество подписчиков'
+
+    class Meta:
+        model = Recipe
 
 
 class IngredientAmountAdmin(admin.ModelAdmin):
