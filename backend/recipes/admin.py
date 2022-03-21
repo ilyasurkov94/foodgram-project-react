@@ -27,7 +27,7 @@ class RecipeAdmin(admin.ModelAdmin):
     list_display = ('pk', 'author', 'name',
                     'cooking_time', 'pub_date', 'followers', 'image')
     list_editable = ('author', 'name')
-    search_field = ('author', 'email', 'name')
+    search_fields = ('author__username', 'author__email', 'name')
     list_filter = ('tags', )
 
     def followers(self, obj):
@@ -36,28 +36,30 @@ class RecipeAdmin(admin.ModelAdmin):
 
 
 class IngredientAmountAdmin(admin.ModelAdmin):
-    list_display = ('pk', 'ingredient', 'recipe',
-                    'amount', 'username', 'email')
-    list_editable = ('ingredient', 'recipe', 'amount')
-    search_fields = ('recipe', 'username', 'email')
+    list_display = ('pk', 'ingredient', 'recipe__name',
+                    'amount', 'recipe__author__username',
+                    'recipe__author__email')
+    list_editable = ('ingredient', 'recipe__name', 'amount')
+    search_fields = ('recipe__name', 'recipe__author__username',
+                     'recipe__author__email')
 
-    def username(self, obj):
-        return obj.recipe.author.username
+    # def username(self, obj):
+    #     return obj.recipe.author.username
 
-    def email(self, obj):
-        return obj.recipe.author.email
+    # def email(self, obj):
+    #     return obj.recipe.author.email
 
 
 class FollowOnUserAdmin(admin.ModelAdmin):
     list_display = ('pk', 'user', 'author')
     list_editable = ('user', 'author')
-    search_fields = ('user', 'author')
+    search_fields = ('user', 'user__email')
 
 
 class FollowOnRecipeAdmin(admin.ModelAdmin):
     list_display = ('pk', 'user', 'recipe')
     list_editable = ('user', 'recipe')
-    list_filter = ('user', 'recipe')
+    search_fields = ('user', 'user__email')
 
 
 admin.site.register(Tag, TagAdmin)
