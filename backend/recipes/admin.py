@@ -27,7 +27,8 @@ class RecipeAdmin(admin.ModelAdmin):
     list_display = ('pk', 'author', 'name',
                     'cooking_time', 'pub_date', 'followers', 'image')
     list_editable = ('author', 'name')
-    list_filter = ('author', 'tags')
+    search_field = ('author', 'email', 'name')
+    list_filter = ('tags', )
 
     def followers(self, obj):
         return obj.followers.count()
@@ -35,15 +36,22 @@ class RecipeAdmin(admin.ModelAdmin):
 
 
 class IngredientAmountAdmin(admin.ModelAdmin):
-    list_display = ('pk', 'ingredient', 'recipe', 'amount')
+    list_display = ('pk', 'ingredient', 'recipe',
+                    'amount', 'username', 'email')
     list_editable = ('ingredient', 'recipe', 'amount')
-    list_filter = ('ingredient', )
+    search_fields = ('recipe', 'username', 'email')
+
+    def username(self, obj):
+        return obj.recipe.author.username
+
+    def email(self, obj):
+        return obj.recipe.author.email
 
 
 class FollowOnUserAdmin(admin.ModelAdmin):
     list_display = ('pk', 'user', 'author')
     list_editable = ('user', 'author')
-    list_filter = ('user', 'author')
+    search_fields = ('user', 'author')
 
 
 class FollowOnRecipeAdmin(admin.ModelAdmin):
