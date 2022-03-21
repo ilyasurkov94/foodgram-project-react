@@ -52,7 +52,8 @@ class IngredientAmountAdmin(admin.ModelAdmin):
 class FollowOnUserAdmin(admin.ModelAdmin):
     list_display = ('pk', 'user', 'author')
     list_editable = ('user', 'author')
-    search_fields = ('user__username', 'author__username', 'user__email')
+    search_fields = ('user__username', 'user__email', 'author__username',
+                     'author__email')
 
 
 class FollowOnRecipeAdmin(admin.ModelAdmin):
