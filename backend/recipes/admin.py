@@ -39,7 +39,8 @@ class IngredientAmountAdmin(admin.ModelAdmin):
     list_display = ('pk', 'ingredient', 'recipe',
                     'amount', 'username', 'email')
     list_editable = ('ingredient', 'recipe', 'amount')
-    search_fields = ('recipe__name', 'username', 'email')
+    search_fields = ('recipe__name', 'recipe__author__username',
+                     'recipe__author__email')
 
     def username(self, obj):
         return obj.recipe.author.username
