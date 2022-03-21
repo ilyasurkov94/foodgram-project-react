@@ -36,18 +36,16 @@ class RecipeAdmin(admin.ModelAdmin):
 
 
 class IngredientAmountAdmin(admin.ModelAdmin):
-    list_display = ('pk', 'ingredient', 'recipe__name',
-                    'amount', 'recipe__author__username',
-                    'recipe__author__email')
-    list_editable = ('ingredient', 'recipe__name', 'amount')
-    search_fields = ('recipe__name', 'recipe__author__username',
-                     'recipe__author__email')
+    list_display = ('pk', 'ingredient', 'recipe',
+                    'amount', 'username', 'email')
+    list_editable = ('ingredient', 'recipe', 'amount')
+    search_fields = ('recipe__name', 'username', 'email')
 
-    # def username(self, obj):
-    #     return obj.recipe.author.username
+    def username(self, obj):
+        return obj.recipe.author.username
 
-    # def email(self, obj):
-    #     return obj.recipe.author.email
+    def email(self, obj):
+        return obj.recipe.author.email
 
 
 class FollowOnUserAdmin(admin.ModelAdmin):
